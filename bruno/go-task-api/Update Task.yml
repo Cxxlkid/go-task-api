@@ -1,0 +1,15 @@
+info:
+  name: Update Task
+  type: http
+  seq: 8
+
+http:
+  method: PUT
+  url: http://localhost:8080/tasks/{id}
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

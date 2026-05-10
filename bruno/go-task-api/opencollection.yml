@@ -1,0 +1,26 @@
+opencollection: 1.0.0
+
+info:
+  name: go-task-api
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Nzg1MDM2MjMsInVzZXJfaWQiOiJhMDUwMWVkOC1lM2VkLTQwMGQtOTA4MC04M2MxMjdkNjRlYmEifQ.h3Ti_QIW8g8JxGBmGC4QhyM6-78WJhR99QvjkORKNCI
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
