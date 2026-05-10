@@ -18,9 +18,7 @@ import (
 
 func main() {
 	// Chargement du .env
-	if err := godotenv.Load(); err != nil {
-		slog.Warn("no .env file found")
-	}
+	godotenv.Load() // silencieux si pas de .env, normal en container
 
 	// Logger structuré
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
