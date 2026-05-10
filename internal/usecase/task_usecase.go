@@ -6,6 +6,8 @@ import (
 
 	"github.com/Cxxlkid/go-task-api/internal/domain"
 	"github.com/google/uuid"
+	"github.com/Cxxlkid/go-task-api/internal/validator"
+
 )
 
 type taskUsecase struct {
@@ -21,6 +23,10 @@ func NewTaskUsecase(taskRepo domain.TaskRepository, userRepo domain.UserReposito
 }
 
 func (u *taskUsecase) Create(userID string, req domain.CreateTaskRequest) (*domain.Task, error) {
+	// Validation
+	if errs := validator.ValidateCreateTask(req.Title); len(errs) > 0 {
+		return nil, errs
+	}
 	// Vérifier que l'user assigné existe si fourni
 	if req.AssignedTo != nil {
 		_, err := u.userRepo.GetByID(*req.AssignedTo)
@@ -58,6 +64,11 @@ func (u *taskUsecase) GetByID(id string) (*domain.Task, error) {
 }
 
 func (u *taskUsecase) Update(id string, req domain.UpdateTaskRequest) (*domain.Task, error) {
+	// Validation
+	status := (*string)(req.Status)
+	if errs := validator.ValidateUpdateTask(status); len(errs) > 0 {
+		return nil, errs
+	}
 	task, err := u.taskRepo.GetByID(id)
 	if err != nil {
 		return nil, fmt.Errorf("task not found")

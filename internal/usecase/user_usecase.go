@@ -8,6 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/Cxxlkid/go-task-api/internal/validator"
 )
 
 type userUsecase struct {
@@ -23,6 +24,10 @@ func NewUserUsecase(userRepo domain.UserRepository, jwtSecret string) domain.Use
 }
 
 func (u *userUsecase) Register(req domain.CreateUserRequest) (*domain.User, error) {
+	// Validation
+	if errs := validator.ValidateRegister(req.Email, req.Password, req.Name); len(errs) > 0 {
+		return nil, errs
+	}
 	// Vérifier si l'email existe déjà
 	existing, _ := u.userRepo.GetByEmail(req.Email)
 	if existing != nil {
@@ -53,6 +58,10 @@ func (u *userUsecase) Register(req domain.CreateUserRequest) (*domain.User, erro
 }
 
 func (u *userUsecase) Login(req domain.LoginRequest) (*domain.AuthResponse, error) {
+	// Validation
+	if errs := validator.ValidateLogin(req.Email, req.Password); len(errs) > 0 {
+		return nil, errs
+	}
 	// Récupérer le user par email
 	user, err := u.userRepo.GetByEmail(req.Email)
 	if err != nil {
