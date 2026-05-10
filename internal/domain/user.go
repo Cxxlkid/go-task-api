@@ -2,42 +2,43 @@ package domain
 
 import "time"
 
+// User is the core domain model
 type User struct {
 	ID           string    `json:"id"`
 	Email        string    `json:"email"`
-	PasswordHash string    `json:"-"` // le "-" = jamais renvoyé en JSON
+	PasswordHash string    `json:"-"` // never exposed in JSON responses
 	Name         string    `json:"name"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-// Ce qu'on reçoit pour créer un user
+// CreateUserRequest holds the payload for user registration
 type CreateUserRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Name     string `json:"name"`
 }
 
-// Ce qu'on reçoit pour se connecter
+// LoginRequest holds the payload for user authentication
 type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-// Ce qu'on renvoie après login
+// AuthResponse holds the JWT token and user info returned after a successful login
 type AuthResponse struct {
 	Token string `json:"token"`
 	User  User   `json:"user"`
 }
 
-// L'interface que le repository DOIT implémenter
+// UserRepository defines the persistence contract for users
 type UserRepository interface {
 	Create(user *User) error
 	GetByID(id string) (*User, error)
 	GetByEmail(email string) (*User, error)
 }
 
-// L'interface que le usecase DOIT implémenter
+// UserUsecase defines the business logic contract for users
 type UserUsecase interface {
 	Register(req CreateUserRequest) (*User, error)
 	Login(req LoginRequest) (*AuthResponse, error)

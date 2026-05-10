@@ -3,15 +3,14 @@ FROM golang:1.26-alpine AS builder
 
 WORKDIR /app
 
-# On copie les fichiers de dépendances en premier
-# Docker met en cache cette couche si go.mod/go.sum n'ont pas changé
+# Copy dependency files first to leverage Docker layer caching
 COPY go.mod go.sum ./
 RUN go mod download
 
-# On copie le reste du code
+# Copy the rest of the source code
 COPY . .
 
-# On compile l'application
+# Build the binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o api ./cmd/api/main.go
 
 # Stage 2 — Run
@@ -19,7 +18,7 @@ FROM alpine:latest
 
 WORKDIR /app
 
-# On copie uniquement le binaire compilé du stage précédent
+# Copy only the compiled binary from the builder stage
 COPY --from=builder /app/api .
 
 EXPOSE 8080

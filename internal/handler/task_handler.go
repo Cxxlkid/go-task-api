@@ -76,12 +76,13 @@ func (h *TaskHandler) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *TaskHandler) List(w http.ResponseWriter, r *http.Request) {
+	// Default pagination values
 	filter := domain.TaskFilter{
 		Page:     1,
 		PageSize: 10,
 	}
 
-	// Filtres optionnels depuis les query params
+	// Optional query param filters
 	if status := r.URL.Query().Get("status"); status != "" {
 		s := domain.TaskStatus(status)
 		filter.Status = &s

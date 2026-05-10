@@ -22,8 +22,11 @@ go-task-api/
 │   ├── domain/       # Models & interfaces
 │   ├── repository/   # SQL queries
 │   ├── usecase/      # Business logic
-│   └── handler/      # HTTP handlers & middleware
-└── migrations/       # SQL migrations
+│   ├── handler/      # HTTP handlers & middleware
+│   ├── validator/    # Input validation
+│   └── mocks/        # Mocks for unit tests
+├── migrations/       # SQL migrations
+└── bruno/            # Bruno API collection for local testing
 ```
 
 ## Prerequisites
@@ -63,6 +66,12 @@ go run cmd/api/main.go
 ```
 
 Server runs on `http://localhost:8080`
+
+## Running Tests
+
+```bash
+go test ./...
+```
 
 ## API Endpoints
 
@@ -105,3 +114,13 @@ Server runs on `http://localhost:8080`
 | `todo` | Task not started |
 | `in_progress` | Task in progress |
 | `done` | Task completed |
+
+## Input Validation
+
+| Field | Rules |
+|-------|-------|
+| `email` | Required, valid email format |
+| `password` | Required, minimum 8 characters |
+| `name` | Required, minimum 2 characters |
+| `title` | Required, between 3 and 255 characters |
+| `status` | Must be `todo`, `in_progress` or `done` |
